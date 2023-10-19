@@ -1,0 +1,19 @@
+<html>
+    <head>
+        <script>
+            function insertarElemento(){
+                var elementToSelect = document.getElementById("prueba");
+                var insertedElement = document.createTextNode("texto insertado 2");
+
+                elementToSelect.insertAdjacentElement("beforebegin", insertedElement);
+            }
+        </script>
+    </head>
+
+    <body>
+        <div class="product-details product-info-19 box-product">Primer Elemento</div>
+        <div class="product-details-tabs" id="prueba">Segundo Elemento</div>
+
+        <button type="button" onclick="insertarElemento()">button</button>
+    </body>
+</html>
