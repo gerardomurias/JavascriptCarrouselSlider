@@ -1,3 +1,20 @@
+// Define a class for creating a list of product data - Slider source images
+class ProductsFactory {
+  setupProductData() {
+    this.productData = [
+      { name: "Product 1", image: "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/636cf3a212fdca8d40bc63a33a39b481.jpg?imageView2/2/w/800/q/70", price: "$19.99" },
+      { name: "Product 2", image: "https://www.bluebananabrand.com/cdn/shop/products/Prod.HoodieClassicBerry1_1296x.jpg?v=1661439815", price: "$24.99" },
+      { name: "Product 3", image: "https://www.rocacorbagirona.com/cdn/shop/files/MOCKUPSAW23OK-23_800x.jpg?v=1693470454", price: "$29.99" },
+      { name: "Product 4", image: "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/720941e2c42daa4c15f2cd6fa775f346.jpg?imageView2/2/w/800/q/70", price: "$14.99" },
+      { name: "Product 5", image: "https://www.rocacorbagirona.com/cdn/shop/files/MOCKUPSAW23OK-21_800x.jpg?v=1693470425", price: "$22.99" },
+      { name: "Product 6", image: "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/059104c1ce4e59b67e1068466d72f3d5.jpg?imageView2/2/w/800/q/70", price: "$34.99" },
+    ];
+
+    return this.productData;
+  }
+}
+
+//POCO Class for product info (image, price..)
 class Product {
   constructor(name, image, price) {
     this.name = name;
@@ -6,6 +23,7 @@ class Product {
   }
 }
 
+//vars and styles for setting up the widget container and all internal elements
 class RecommendationsWidget {
   constructor(products) {
     this.products = products;
@@ -44,17 +62,46 @@ class RecommendationsWidget {
     return arrow;
   }
 
+  addAnimationToWidget() {
+    const styleElement = document.createElement('style');
+    const animationRule = document.createTextNode(`
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+    `);
+
+    styleElement.appendChild(animationRule);
+
+    // Append the <style> element to the document's <head>
+    document.head.appendChild(styleElement);
+
+    this.widgetContainer.style.animation = 'pulse 1s'; // You can replace 'pulse' with the animation name you desire.
+    this.widgetContainer.addEventListener('animationend', () => {
+      this.widgetContainer.style.animation = ''; // Reset the animation property
+    });
+  }
+
   setupArrowButtonListeners() {
     this.leftArrow.addEventListener("click", () => {
       this.currentPage = this.currentPage > 1 ? this.currentPage - 1 : Math.ceil(this.products.length / 3);
       this.renderProducts();
       this.addScaleAnimation(this.leftArrow);
+      this.addAnimationToWidget();
     });
 
     this.rightArrow.addEventListener("click", () => {
       this.currentPage = this.currentPage < Math.ceil(this.products.length / 3) ? this.currentPage + 1 : 1;
       this.renderProducts();
       this.addScaleAnimation(this.rightArrow);
+      this.addAnimationToWidget();
     });
   }
 
@@ -113,23 +160,22 @@ class RecommendationsWidget {
   }
 }
 
-// Define the product recommendations data
-const productData = [
-  { name: "Product 1", image: "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/636cf3a212fdca8d40bc63a33a39b481.jpg?imageView2/2/w/800/q/70", price: "$19.99" },
-  { name: "Product 2", image: "https://www.bluebananabrand.com/cdn/shop/products/Prod.HoodieClassicBerry1_1296x.jpg?v=1661439815", price: "$24.99" },
-  { name: "Product 3", image: "https://www.rocacorbagirona.com/cdn/shop/files/MOCKUPSAW23OK-23_800x.jpg?v=1693470454", price: "$29.99" },
-  { name: "Product 4", image: "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/720941e2c42daa4c15f2cd6fa775f346.jpg?imageView2/2/w/800/q/70", price: "$14.99" },
-  { name: "Product 5", image: "https://www.rocacorbagirona.com/cdn/shop/files/MOCKUPSAW23OK-21_800x.jpg?v=1693470425", price: "$22.99" },
-  { name: "Product 6", image: "https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/059104c1ce4e59b67e1068466d72f3d5.jpg?imageView2/2/w/800/q/70", price: "$34.99" },
-];
 
-// Create instances of Product and RecommendationsWidget
+
+
+
+// Trigger point. Create instances of Product and RecommendationsWidget
+const productData = new ProductsFactory()
+  .setupProductData();
+
 const products = productData.map(product => new Product(product.name, product.image, product.price));
+
 const recommendationsWidget = new RecommendationsWidget(products);
 
 // Find the product details section
 const productDetails = RecommendationsWidget.findProductDetails();
 
+//Insert widget into website
 if (productDetails) {
   productDetails.parentNode.insertBefore(recommendationsWidget.widgetContainer, productDetails.nextSibling);
 }
