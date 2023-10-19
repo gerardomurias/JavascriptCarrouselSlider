@@ -50,8 +50,9 @@ class RecommendationsWidget {
 
   setupContainerStyles() {
     this.widgetContainer.style.display = 'flex';
-    this.widgetContainer.style.justifyContent = 'space-between';
+    this.widgetContainer.style.justifyContent = 'center'; // Cambiar de 'space-between' a 'center'
     this.widgetContainer.style.alignItems = 'center';
+    this.widgetContainer.style.width = '100%'; // Añadir esta línea para ocupar todo el ancho disponible
   }
 
   createArrowButton(direction) {
@@ -159,7 +160,6 @@ class RecommendationsWidget {
     return null;
   }
 }
-
 
 
 
